@@ -112,13 +112,13 @@ View-once media commands let you reveal, convert, edit, and send view-once messa
 
 ## 🔗 Pair Site & Session ID (No QR Needed)
 
-The repo includes a standalone **Pair Code Generator** in the `pair-site/` folder. Deploy it on Render, enter your phone number, get a pairing code, link WhatsApp, and receive a **Session ID string**. Set that string as the `SESSION_ID` env var on your bot deployment and it auto-connects — no QR scan required.
+The pair code generator lives in its own repo: **[ntandoofcchisaya/ntandomods-pair-site](https://github.com/ntandoofcchisaya/ntandomods-pair-site)**. Deploy it on Render, enter your phone number, get a pairing code, link WhatsApp, and receive a **Session ID string**. Set that string as the `SESSION_ID` env var on your bot deployment and it auto-connects — no QR scan required.
 
 ### Deploy the pair site on Render
 
 1. On [render.com](https://render.com) → **New → Web Service**.
-2. Connect this repo. Set **Root Directory** to `pair-site`.
-3. Render auto-detects `pair-site/render.yaml`:
+2. Connect the [ntandomods-pair-site](https://github.com/ntandoofcchisaya/ntandomods-pair-site) repo.
+3. Render auto-detects `render.yaml`:
    - **Build:** `npm install`
    - **Start:** `node server.js`
 4. Deploy → you'll get a URL like `https://ntandomods-pair.onrender.com`.
@@ -137,7 +137,7 @@ The repo includes a standalone **Pair Code Generator** in the `pair-site/` folde
 3. Add env var **`SESSION_ID`** = your copied session string.
 4. Deploy — the bot decodes the session string into `creds.json` and boots up already linked.
 
-> See [`pair-site/README.md`](pair-site/README.md) for the full API reference and local dev instructions.
+> See the [pair-site repo README](https://github.com/ntandoofcchisaya/ntandomods-pair-site#readme) for the full API reference and local dev instructions.
 
 ## ⚙️ Configuration
 
