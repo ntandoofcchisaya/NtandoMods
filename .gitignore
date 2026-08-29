@@ -4,3 +4,4 @@ sessions/
 .DS_Store
 *.log
 npm-debug.log*
+todo.md
