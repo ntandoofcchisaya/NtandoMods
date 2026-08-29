@@ -17,6 +17,7 @@
   "license": "MIT",
   "dependencies": {
     "@whiskeysockets/baileys": "^6.7.18",
+    "jimp": "^0.22.12",
     "pino": "^8.11.0"
   }
 }

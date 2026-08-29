@@ -2179,6 +2179,463 @@ const commands = {
     },
   },
 
+  // ────────────────────────────────────────────────────────────
+  //  10 HACK-THEMED FUN COMMANDS
+  // ────────────────────────────────────────────────────────────
+
+  trace: {
+    desc: 'Fake IP trace animation (fun)',
+    category: 'fun',
+    run: async (sock, msg, ctx) => {
+      const target = ctx.args.join(' ') || 'target';
+      const lines = [
+        '🔍 Starting IP trace...',
+        '📡 Pinging network nodes...',
+        '🌐 Routing through 7 servers...',
+        '📍 Locating ISP gateway...',
+        ' triangulating signal...',
+        '✅ IP Address: 41.203.' + (Math.floor(Math.random()*255)) + '.' + (Math.floor(Math.random()*255)),
+        '🏙️ Location: Johannesburg, South Africa',
+        '📡 ISP: MTN Network',
+        '💻 Device: Android 14',
+        '✅ Trace complete for ' + target + '! (not real 😏)',
+      ];
+      let sent = await sock.sendMessage(ctx.from, { text: '🌐 *IP TRACE*\n' + lines[0] }, { quoted: msg });
+      for (let i = 1; i < lines.length; i++) {
+        await new Promise(r => setTimeout(r, 700));
+        try { await sock.sendMessage(ctx.from, { text: lines[i], edit: sent.key }); } catch (_) {}
+      }
+    },
+  },
+
+  decrypt: {
+    desc: 'Fake message decryption animation (fun)',
+    category: 'fun',
+    run: async (sock, msg, ctx) => {
+      const lines = [
+        '🔐 Intercepting encrypted message...',
+        '📦 Packet captured: 1024 bytes',
+        '🔑 Analyzing encryption layer (AES-256)...',
+        '🧮 Brute-forcing decryption key...',
+        '⏳ 25%... 50%... 75%... 100%',
+        '🔓 Decryption successful!',
+        '💬 Message reads: "Don\'t forget to buy milk" 🥛',
+        '✅ Mission accomplished! (totally fake 😏)',
+      ];
+      let sent = await sock.sendMessage(ctx.from, { text: '🔓 *DECRYPT MODE*\n' + lines[0] }, { quoted: msg });
+      for (let i = 1; i < lines.length; i++) {
+        await new Promise(r => setTimeout(r, 650));
+        try { await sock.sendMessage(ctx.from, { text: lines[i], edit: sent.key }); } catch (_) {}
+      }
+    },
+  },
+
+  inject: {
+    desc: 'Fake code injection animation (fun)',
+    category: 'fun',
+    run: async (sock, msg, ctx) => {
+      const lines = [
+        '💉 Preparing injection payload...',
+        '🎯 Target: main database server',
+        '🔌 Connecting to port 3306...',
+        '📝 Crafting SQL injection string...',
+        ` payload: ' OR '1'='1 --`,
+        '⚡ Injecting payload...',
+        '✅ Database access granted!',
+        '📊 Extracting 10,000 records...',
+        '✅ Injection complete! (just a joke 😏)',
+      ];
+      let sent = await sock.sendMessage(ctx.from, { text: '💉 *CODE INJECTION*\n' + lines[0] }, { quoted: msg });
+      for (let i = 1; i < lines.length; i++) {
+        await new Promise(r => setTimeout(r, 700));
+        try { await sock.sendMessage(ctx.from, { text: lines[i], edit: sent.key }); } catch (_) {}
+      }
+    },
+  },
+
+  breach: {
+    desc: 'Fake security breach animation (fun)',
+    category: 'fun',
+    run: async (sock, msg, ctx) => {
+      const target = ctx.args.join(' ') || 'the server';
+      const lines = [
+        '🚨 Initiating breach protocol on ' + target + '...',
+        '🛡️ Scanning for vulnerabilities...',
+        '⚠️ CVE-2024-1337 detected!',
+        '💣 Exploiting buffer overflow...',
+        '🔓 Bypassing 3 security layers...',
+        '📥 Dumping credentials table...',
+        '💀 Breach successful!',
+        '📊 5,234 accounts compromised. (not really 😏)',
+      ];
+      let sent = await sock.sendMessage(ctx.from, { text: '🚨 *SECURITY BREACH*\n' + lines[0] }, { quoted: msg });
+      for (let i = 1; i < lines.length; i++) {
+        await new Promise(r => setTimeout(r, 750));
+        try { await sock.sendMessage(ctx.from, { text: lines[i], edit: sent.key }); } catch (_) {}
+      }
+    },
+  },
+
+  virus: {
+    desc: 'Fake virus release animation (fun)',
+    category: 'fun',
+    run: async (sock, msg, ctx) => {
+      const lines = [
+        '🦠 Compiling virus payload...',
+        '📦 Package: trojan.exe (2.4 MB)',
+        '🌐 Uploading to C2 server...',
+        '📧 Spamming 1,000 email targets...',
+        '💻 Infecting connected devices...',
+        '⏳ Infection rate: 73%...',
+        '💀 System compromised!',
+        '🧹 Just kidding — no virus here! 😏 Stay safe online.',
+      ];
+      let sent = await sock.sendMessage(ctx.from, { text: '🦠 *VIRUS DEPLOYMENT*\n' + lines[0] }, { quoted: msg });
+      for (let i = 1; i < lines.length; i++) {
+        await new Promise(r => setTimeout(r, 700));
+        try { await sock.sendMessage(ctx.from, { text: lines[i], edit: sent.key }); } catch (_) {}
+      }
+    },
+  },
+
+  ddos: {
+    desc: 'Fake DDoS attack animation (fun)',
+    category: 'fun',
+    run: async (sock, msg, ctx) => {
+      const target = ctx.args.join(' ') || 'example.com';
+      const lines = [
+        '⚡ Launching DDoS attack on ' + target + '...',
+        '🤖 Deploying 10,000 botnet nodes...',
+        '📡 Sending 50,000 req/sec...',
+        '📈 Traffic: 2.3 Gbps...',
+        '🔥 Target response time: 5000ms+',
+        '💀 Server is down!',
+        '⏹️ Attack stopped after 30 seconds.',
+        '😏 Relax — this is just a simulation!',
+      ];
+      let sent = await sock.sendMessage(ctx.from, { text: '⚡ *DDOS ATTACK*\n' + lines[0] }, { quoted: msg });
+      for (let i = 1; i < lines.length; i++) {
+        await new Promise(r => setTimeout(r, 700));
+        try { await sock.sendMessage(ctx.from, { text: lines[i], edit: sent.key }); } catch (_) {}
+      }
+    },
+  },
+
+  brute: {
+    desc: 'Fake brute force password animation (fun)',
+    category: 'fun',
+    run: async (sock, msg, ctx) => {
+      const lines = [
+        '🔨 Loading brute force dictionary...',
+        '📦 14,000,000 passwords loaded',
+        '⚡ Trying: password123... ❌',
+        '⚡ Trying: admin2024... ❌',
+        '⚡ Trying: iloveyou... ❌',
+        '⚡ Trying: qwerty123... ❌',
+        '✅ Password found: "ntando123" 🔑',
+        '😏 Just a joke — use strong passwords IRL!',
+      ];
+      let sent = await sock.sendMessage(ctx.from, { text: '🔨 *BRUTE FORCE*\n' + lines[0] }, { quoted: msg });
+      for (let i = 1; i < lines.length; i++) {
+        await new Promise(r => setTimeout(r, 600));
+        try { await sock.sendMessage(ctx.from, { text: lines[i], edit: sent.key }); } catch (_) {}
+      }
+    },
+  },
+
+  spy: {
+    desc: 'Fake surveillance spy animation (fun)',
+    category: 'fun',
+    run: async (sock, msg, ctx) => {
+      const target = ctx.args.join(' ') || 'the target';
+      const lines = [
+        '🕵️ Activating spy mode on ' + target + '...',
+        '📷 Accessing front camera...',
+        '🎙️ Tapping microphone feed...',
+        '📍 GPS: -26.2041°, 28.0473°',
+        '💬 Last message: "on my way"',
+        '🔋 Battery: 67%',
+        '📸 Screenshot captured!',
+        '🕵️ Surveillance complete! (fake — privacy matters 😏)',
+      ];
+      let sent = await sock.sendMessage(ctx.from, { text: '🕵️ *SPY MODE*\n' + lines[0] }, { quoted: msg });
+      for (let i = 1; i < lines.length; i++) {
+        await new Promise(r => setTimeout(r, 700));
+        try { await sock.sendMessage(ctx.from, { text: lines[i], edit: sent.key }); } catch (_) {}
+      }
+    },
+  },
+
+  steal: {
+    desc: 'Fake data theft animation (fun)',
+    category: 'fun',
+    run: async (sock, msg, ctx) => {
+      const target = ctx.args.join(' ') || 'the victim';
+      const lines = [
+        '🎭 Disguising as trusted contact...',
+        '🔗 Sending phishing link to ' + target + '...',
+        '👆 Target clicked the link!',
+        '🍪 Stealing session cookies...',
+        '💳 Grabbing saved card details...',
+        '📸 Downloading gallery (127 photos)...',
+        '📦 Packaging stolen data...',
+        '✅ Data theft complete! (not real — don\'t phish 😏)',
+      ];
+      let sent = await sock.sendMessage(ctx.from, { text: '🎭 *DATA THEFT*\n' + lines[0] }, { quoted: msg });
+      for (let i = 1; i < lines.length; i++) {
+        await new Promise(r => setTimeout(r, 700));
+        try { await sock.sendMessage(ctx.from, { text: lines[i], edit: sent.key }); } catch (_) {}
+      }
+    },
+  },
+
+  crack: {
+    desc: 'Fake WiFi password crack animation (fun)',
+    category: 'fun',
+    run: async (sock, msg, ctx) => {
+      const target = ctx.args.join(' ') || 'WiFi_Network';
+      const lines = [
+        '📡 Scanning for WiFi networks...',
+        '✅ Found: ' + target,
+        '🔒 Encryption: WPA2',
+        ' handshake captured!',
+        '🧮 Running dictionary attack...',
+        '⏳ 10%... 40%... 80%... 100%',
+        '🔑 Password: "mzansi2024"',
+        '✅ WiFi cracked! (purely fictional 😏)',
+      ];
+      let sent = await sock.sendMessage(ctx.from, { text: '📶 *WIFI CRACK*\n' + lines[0] }, { quoted: msg });
+      for (let i = 1; i < lines.length; i++) {
+        await new Promise(r => setTimeout(r, 700));
+        try { await sock.sendMessage(ctx.from, { text: lines[i], edit: sent.key }); } catch (_) {}
+      }
+    },
+  },
+
+  // ────────────────────────────────────────────────────────────
+  //  10 IMAGE EDIT COMMANDS (require Jimp, reply to an image)
+  // ────────────────────────────────────────────────────────────
+
+  blur: {
+    desc: 'Blur the replied image',
+    category: 'media',
+    run: async (sock, msg, ctx) => {
+      const imgMsg = getQuotedImage(msg);
+      if (!imgMsg) return sock.sendMessage(ctx.from, { text: '❌ Reply to an image with this command.' }, { quoted: msg });
+      try {
+        const buffer = await sock.downloadMediaMessage?.({ key: msg.key, message: { imageMessage: imgMsg } });
+        if (!buffer) throw new Error('download failed');
+        const Jimp = require('jimp');
+        const image = await Jimp.read(buffer);
+        image.blur(10);
+        const out = await image.getBufferAsync(Jimp.MIME_PNG);
+        return sock.sendMessage(ctx.from, { image: out, caption: '🌫️ Blurred image' }, { quoted: msg });
+      } catch (e) {
+        return sock.sendMessage(ctx.from, { text: `❌ Error: ${e.message}` }, { quoted: msg });
+      }
+    },
+  },
+
+  grayscale: {
+    desc: 'Convert replied image to grayscale',
+    category: 'media',
+    run: async (sock, msg, ctx) => {
+      const imgMsg = getQuotedImage(msg);
+      if (!imgMsg) return sock.sendMessage(ctx.from, { text: '❌ Reply to an image with this command.' }, { quoted: msg });
+      try {
+        const buffer = await sock.downloadMediaMessage?.({ key: msg.key, message: { imageMessage: imgMsg } });
+        if (!buffer) throw new Error('download failed');
+        const Jimp = require('jimp');
+        const image = await Jimp.read(buffer);
+        image.grayscale();
+        const out = await image.getBufferAsync(Jimp.MIME_PNG);
+        return sock.sendMessage(ctx.from, { image: out, caption: '🖤 Grayscale image' }, { quoted: msg });
+      } catch (e) {
+        return sock.sendMessage(ctx.from, { text: `❌ Error: ${e.message}` }, { quoted: msg });
+      }
+    },
+  },
+
+  sepia: {
+    desc: 'Apply sepia tone to replied image',
+    category: 'media',
+    run: async (sock, msg, ctx) => {
+      const imgMsg = getQuotedImage(msg);
+      if (!imgMsg) return sock.sendMessage(ctx.from, { text: '❌ Reply to an image with this command.' }, { quoted: msg });
+      try {
+        const buffer = await sock.downloadMediaMessage?.({ key: msg.key, message: { imageMessage: imgMsg } });
+        if (!buffer) throw new Error('download failed');
+        const Jimp = require('jimp');
+        const image = await Jimp.read(buffer);
+        image.sepia();
+        const out = await image.getBufferAsync(Jimp.MIME_PNG);
+        return sock.sendMessage(ctx.from, { image: out, caption: '🟤 Sepia tone image' }, { quoted: msg });
+      } catch (e) {
+        return sock.sendMessage(ctx.from, { text: `❌ Error: ${e.message}` }, { quoted: msg });
+      }
+    },
+  },
+
+  invert: {
+    desc: 'Invert colors of replied image',
+    category: 'media',
+    run: async (sock, msg, ctx) => {
+      const imgMsg = getQuotedImage(msg);
+      if (!imgMsg) return sock.sendMessage(ctx.from, { text: '❌ Reply to an image with this command.' }, { quoted: msg });
+      try {
+        const buffer = await sock.downloadMediaMessage?.({ key: msg.key, message: { imageMessage: imgMsg } });
+        if (!buffer) throw new Error('download failed');
+        const Jimp = require('jimp');
+        const image = await Jimp.read(buffer);
+        image.invert();
+        const out = await image.getBufferAsync(Jimp.MIME_PNG);
+        return sock.sendMessage(ctx.from, { image: out, caption: '🔃 Inverted colors' }, { quoted: msg });
+      } catch (e) {
+        return sock.sendMessage(ctx.from, { text: `❌ Error: ${e.message}` }, { quoted: msg });
+      }
+    },
+  },
+
+  rotate: {
+    desc: 'Rotate replied image (usage: .rotate <degrees>)',
+    category: 'media',
+    run: async (sock, msg, ctx) => {
+      const imgMsg = getQuotedImage(msg);
+      if (!imgMsg) return sock.sendMessage(ctx.from, { text: '❌ Reply to an image with this command.' }, { quoted: msg });
+      const deg = parseInt(ctx.args[0]) || 90;
+      try {
+        const buffer = await sock.downloadMediaMessage?.({ key: msg.key, message: { imageMessage: imgMsg } });
+        if (!buffer) throw new Error('download failed');
+        const Jimp = require('jimp');
+        const image = await Jimp.read(buffer);
+        image.rotate(deg);
+        const out = await image.getBufferAsync(Jimp.MIME_PNG);
+        return sock.sendMessage(ctx.from, { image: out, caption: `🔄 Rotated ${deg}°` }, { quoted: msg });
+      } catch (e) {
+        return sock.sendMessage(ctx.from, { text: `❌ Error: ${e.message}` }, { quoted: msg });
+      }
+    },
+  },
+
+  flip: {
+    desc: 'Flip replied image horizontally',
+    category: 'media',
+    run: async (sock, msg, ctx) => {
+      const imgMsg = getQuotedImage(msg);
+      if (!imgMsg) return sock.sendMessage(ctx.from, { text: '❌ Reply to an image with this command.' }, { quoted: msg });
+      try {
+        const buffer = await sock.downloadMediaMessage?.({ key: msg.key, message: { imageMessage: imgMsg } });
+        if (!buffer) throw new Error('download failed');
+        const Jimp = require('jimp');
+        const image = await Jimp.read(buffer);
+        image.flip(true, false);
+        const out = await image.getBufferAsync(Jimp.MIME_PNG);
+        return sock.sendMessage(ctx.from, { image: out, caption: '🔃 Flipped horizontally' }, { quoted: msg });
+      } catch (e) {
+        return sock.sendMessage(ctx.from, { text: `❌ Error: ${e.message}` }, { quoted: msg });
+      }
+    },
+  },
+
+  mirror: {
+    desc: 'Mirror replied image vertically',
+    category: 'media',
+    run: async (sock, msg, ctx) => {
+      const imgMsg = getQuotedImage(msg);
+      if (!imgMsg) return sock.sendMessage(ctx.from, { text: '❌ Reply to an image with this command.' }, { quoted: msg });
+      try {
+        const buffer = await sock.downloadMediaMessage?.({ key: msg.key, message: { imageMessage: imgMsg } });
+        if (!buffer) throw new Error('download failed');
+        const Jimp = require('jimp');
+        const image = await Jimp.read(buffer);
+        image.flip(false, true);
+        const out = await image.getBufferAsync(Jimp.MIME_PNG);
+        return sock.sendMessage(ctx.from, { image: out, caption: '🪞 Mirrored vertically' }, { quoted: msg });
+      } catch (e) {
+        return sock.sendMessage(ctx.from, { text: `❌ Error: ${e.message}` }, { quoted: msg });
+      }
+    },
+  },
+
+  border: {
+    desc: 'Add a border to replied image (usage: .border <size>)',
+    category: 'media',
+    run: async (sock, msg, ctx) => {
+      const imgMsg = getQuotedImage(msg);
+      if (!imgMsg) return sock.sendMessage(ctx.from, { text: '❌ Reply to an image with this command.' }, { quoted: msg });
+      const size = Math.min(Math.max(parseInt(ctx.args[0]) || 10, 1), 50);
+      try {
+        const buffer = await sock.downloadMediaMessage?.({ key: msg.key, message: { imageMessage: imgMsg } });
+        if (!buffer) throw new Error('download failed');
+        const Jimp = require('jimp');
+        const image = await Jimp.read(buffer);
+        const w = image.bitmap.width + (size * 2);
+        const h = image.bitmap.height + (size * 2);
+        const bg = new Jimp(w, h, 0x000000ff);
+        bg.composite(image, size, size);
+        const out = await bg.getBufferAsync(Jimp.MIME_PNG);
+        return sock.sendMessage(ctx.from, { image: out, caption: `🖼️ Border added (${size}px)` }, { quoted: msg });
+      } catch (e) {
+        return sock.sendMessage(ctx.from, { text: `❌ Error: ${e.message}` }, { quoted: msg });
+      }
+    },
+  },
+
+  circle: {
+    desc: 'Make replied image circular',
+    category: 'media',
+    run: async (sock, msg, ctx) => {
+      const imgMsg = getQuotedImage(msg);
+      if (!imgMsg) return sock.sendMessage(ctx.from, { text: '❌ Reply to an image with this command.' }, { quoted: msg });
+      try {
+        const buffer = await sock.downloadMediaMessage?.({ key: msg.key, message: { imageMessage: imgMsg } });
+        if (!buffer) throw new Error('download failed');
+        const Jimp = require('jimp');
+        const image = await Jimp.read(buffer);
+        const size = Math.min(image.bitmap.width, image.bitmap.height);
+        image.cover(size, size);
+        const mask = new Jimp(size, size, 0x00000000);
+        // Draw a white circle on the mask
+        for (let y = 0; y < size; y++) {
+          for (let x = 0; x < size; x++) {
+            const dx = x - size / 2;
+            const dy = y - size / 2;
+            if (Math.sqrt(dx * dx + dy * dy) <= size / 2) {
+              mask.setPixelColor(0xffffffff, x, y);
+            }
+          }
+        }
+        image.mask(mask, 0, 0);
+        const out = await image.getBufferAsync(Jimp.MIME_PNG);
+        return sock.sendMessage(ctx.from, { image: out, caption: '⭕ Circular image' }, { quoted: msg });
+      } catch (e) {
+        return sock.sendMessage(ctx.from, { text: `❌ Error: ${e.message}` }, { quoted: msg });
+      }
+    },
+  },
+
+  resize: {
+    desc: 'Resize replied image (usage: .resize <width> <height>)',
+    category: 'media',
+    run: async (sock, msg, ctx) => {
+      const imgMsg = getQuotedImage(msg);
+      if (!imgMsg) return sock.sendMessage(ctx.from, { text: '❌ Reply to an image with this command.' }, { quoted: msg });
+      const w = parseInt(ctx.args[0]) || 300;
+      const h = parseInt(ctx.args[1]) || Jimp.AUTO;
+      try {
+        const buffer = await sock.downloadMediaMessage?.({ key: msg.key, message: { imageMessage: imgMsg } });
+        if (!buffer) throw new Error('download failed');
+        const Jimp = require('jimp');
+        const image = await Jimp.read(buffer);
+        image.resize(w, h);
+        const out = await image.getBufferAsync(Jimp.MIME_PNG);
+        return sock.sendMessage(ctx.from, { image: out, caption: `📐 Resized to ${image.bitmap.width}x${image.bitmap.height}` }, { quoted: msg });
+      } catch (e) {
+        return sock.sendMessage(ctx.from, { text: `❌ Error: ${e.message}` }, { quoted: msg });
+      }
+    },
+  },
+
   help: {
     desc: 'Alias for menu',
     category: 'core',
