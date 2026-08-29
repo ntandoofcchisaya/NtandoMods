@@ -6,7 +6,7 @@ Designed to be simple, clean, and easy to host — perfect for the KnightBot Mul
 
 ## ✨ Features
 
-- **91 commands** across 11 categories
+- **111 commands** across 11 categories
 - **Modular architecture** — commands live in `menu.js`, shared utilities in `lib.js`, handler logic in `handler.js`
 - Lightweight & fast — minimal dependencies, uses Node built-in `https` (no axios needed)
 - Auto-typing, auto-react, auto-read, auto-bio
@@ -17,6 +17,7 @@ Designed to be simple, clean, and easy to host — perfect for the KnightBot Mul
 - Fun commands with self-contained arrays (no flaky external APIs needed)
 - AI, anime, text-maker, and downloader commands
 - Anti-call support
+- Utility tools: password generator, hashing, URL shortener, Wikipedia search, fancy text, and more
 
 ## 📂 Project Structure
 
@@ -24,7 +25,7 @@ Designed to be simple, clean, and easy to host — perfect for the KnightBot Mul
 ntandomods/
 ├── index.js      # Standalone entry point (Baileys socket + connection)
 ├── handler.js    # Message & group event handlers (entry point for hosting platform)
-├── menu.js       # All 91 command definitions + helper functions
+├── menu.js       # All 111 command definitions + helper functions
 ├── lib.js        # Shared library (HTTP fetch, mentions, group settings, sudo users)
 ├── config.js     # Bot configuration
 ├── data/         # Runtime data (group settings, sudo users) — auto-created
@@ -33,7 +34,7 @@ ntandomods/
 ```
 
 - **`handler.js`** — Exports `handleMessage(sock, msg, config)` and `handleGroupUpdate(sock, update, config)`. This is the interface the hosting platform's `bot-worker.js` loads. It imports commands from `menu.js` and utilities from `lib.js`.
-- **`menu.js`** — Contains all 91 command definitions and the helper functions they depend on (`getSender`, `getNumber`, `isOwner`, `isGroupAdmin`, `isBotAdmin`, `getBody`, `getQuotedText`, `getQuotedImage`, `fmtUptime`, `pickRandom`). Exports `{ commands, helpers }`.
+- **`menu.js`** — Contains all 111 command definitions and the helper functions they depend on (`getSender`, `getNumber`, `isOwner`, `isGroupAdmin`, `isBotAdmin`, `getBody`, `getQuotedText`, `getQuotedImage`, `fmtUptime`, `pickRandom`). Exports `{ commands, helpers }`.
 - **`lib.js`** — Shared library with HTTP helpers (`fetchJSON`, `fetchBuffer`), mention/reply utilities (`getMentions`, `getQuotedParticipant`, `getTargetUser`, `toJid`), and JSON-backed stores (`getGroupSettings`, `updateGroupSettings`, `getSudoUsers`, `addSudoUser`, `removeSudoUser`, `isSudo`).
 - **`index.js`** — Standalone entry point for running the bot directly. Sets up the Baileys socket, loads config, and wires up the handler.
 - **`data/`** — Auto-created at runtime. Stores `groupSettings.json` (per-group settings) and `sudoUsers.json` (sudo user list). Gitignored except for `.gitkeep`.
@@ -43,10 +44,10 @@ ntandomods/
 | Category | Commands |
 |---|---|
 | **🔧 Core** (9) | `.menu`, `.alive`, `.ping`, `.info`, `.runtime`, `.uptime`, `.help`, `.github`, `.owner` |
-| **🎮 Fun** (15) | `.joke`, `.quote`, `.8ball`, `.rps`, `.dice`, `.coinflip`, `.pick`, `.ship`, `.truth`, `.dare`, `.flirt`, `.compliment`, `.insult`, `.gayrate`, `.meme` |
-| **🛠️ Utility** (11) | `.time`, `.date`, `.calc`, `.define`, `.weather`, `.base64`, `.uuid`, `.qr`, `.ssweb`, `.getpp`, `.translate` |
+| **🎮 Fun** (25) | `.joke`, `.quote`, `.8ball`, `.rps`, `.dice`, `.coinflip`, `.pick`, `.ship`, `.truth`, `.dare`, `.flirt`, `.compliment`, `.insult`, `.gayrate`, `.meme`, `.fact`, `.advice`, `.why`, `.hack`, `.rate`, `.couple`, `.character`, `.hug`, `.slap`, `.tagme` |
+| **🛠️ Utility** (20) | `.time`, `.date`, `.calc`, `.define`, `.weather`, `.base64`, `.uuid`, `.qr`, `.ssweb`, `.getpp`, `.translate`, `.styletext`, `.fancy`, `.tinyurl`, `.google`, `.wikipedia`, `.repo`, `.randompw`, `.hash`, `.reverse` |
 | **🎨 Media** (5) | `.sticker`, `.toimg`, `.tts`, `.viewonce`, `.lyrics` |
-| **👥 Group** (9) | `.tagall`, `.hidetag`, `.grouplink`, `.kick`, `.promote`, `.demote`, `.setname`, `.setdesc`, `.groupinfo` |
+| **👥 Group** (10) | `.tagall`, `.hidetag`, `.grouplink`, `.kick`, `.promote`, `.demote`, `.setname`, `.setdesc`, `.groupinfo`, `.poll` |
 | **⚡ Admin** (10) | `.welcome`, `.setwelcome`, `.goodbye`, `.setgoodbye`, `.antilink`, `.mute`, `.unmute`, `.warn`, `.resetwarn`, `.del` |
 | **👑 Owner** (14) | `.self`, `.mode`, `.block`, `.unblock`, `.setprefix`, `.setbotname`, `.setbotpp`, `.eval`, `.getfile`, `.setvar`, `.broadcast`, `.sudo`, `.anticall`, `.clear` |
 | **🤖 AI** (2) | `.ai`, `.gpt` |
@@ -54,7 +55,7 @@ ntandomods/
 | **✨ Text Maker** (6) | `.neon`, `.blackpink`, `.glitch`, `.fire`, `.thunder`, `.text3d` |
 | **📥 Downloader** (5) | `.tiktok`, `.pinterest`, `.song`, `.ytmp3`, `.ytmp4` |
 
-**Total: 91 commands**
+**Total: 111 commands**
 
 ### Permission Flags
 - `ownerOnly` — Only the bot owner can use
@@ -116,7 +117,11 @@ All settings are in `config.js` and can be overridden via environment variables:
 
 ## 📝 Notes
 
-- Fun commands (truth, dare, insult, compliment, flirt) use self-contained arrays — no external API dependencies, so they always work.
+- Fun commands (truth, dare, insult, compliment, flirt, fact, advice, why) use self-contained arrays — no external API dependencies, so they always work.
+- The `.hack` command runs a fun fake hacking animation by editing a message progressively — purely for entertainment.
+- The `.rate` and `.couple` commands use deterministic hashing so the same input always gives the same result.
+- The `.styletext` and `.fancy` commands convert text to decorative Unicode styles (bold, italic, script, circled, fullwidth, etc.) — no external API needed.
+- The `.hash` command uses Node's built-in `crypto` module (MD5 and SHA256).
 - Downloader and text-maker commands use external APIs which may require API keys or have rate limits.
 - Anime image commands use the Nekos.life API (free, no key needed).
 - All HTTP requests use Node's built-in `https`/`http` modules via `lib.js` — no axios or node-fetch required.

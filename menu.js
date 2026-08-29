@@ -1783,6 +1783,402 @@ const commands = {
     },
   },
 
+  // ────────────────────────────────────────────────────────────
+  //  20 ADDITIONAL GOOD COMMANDS
+  // ────────────────────────────────────────────────────────────
+
+  fact: {
+    desc: 'Get a random fun fact',
+    category: 'fun',
+    run: async (sock, msg, ctx) => {
+      const facts = [
+        'Honey never spoils. Archaeologists have found 3000-year-old honey in Egyptian tombs that is still edible.',
+        'Octopuses have three hearts and blue blood.',
+        'A day on Venus is longer than a year on Venus.',
+        'Bananas are berries, but strawberries are not.',
+        'The shortest war in history lasted 38 minutes (Anglo-Zanzibar War, 1896).',
+        'Wombat poop is cube-shaped.',
+        'A group of flamingos is called a "flamboyance".',
+        'The unicorn is the national animal of Scotland.',
+        'Sharks existed before trees did.',
+        'A bolt of lightning is five times hotter than the surface of the sun.',
+        'Cows have best friends and get stressed when separated from them.',
+        'The human nose can remember 50,000 different scents.',
+        'A blue whale\'s heart is the size of a small car.',
+        'There are more possible chess games than atoms in the universe.',
+        'Sea otters hold hands while sleeping so they don\'t drift apart.',
+        'The Eiffel Tower can grow more than 6 inches taller in summer due to heat expansion.',
+        'A jiffy is an actual unit of time: 1/100th of a second.',
+        'The longest English word without a vowel is "rhythm".',
+        'Dolphins give each other names and call each other by them.',
+        'A snail can sleep for up to 3 years.',
+      ];
+      return sock.sendMessage(ctx.from, { text: `💡 *Fun Fact*\n\n${pickRandom(facts)}` }, { quoted: msg });
+    },
+  },
+
+  advice: {
+    desc: 'Get a random piece of life advice',
+    category: 'fun',
+    run: async (sock, msg, ctx) => {
+      const advices = [
+        'Don\'t compare yourself to others. Compare yourself to who you were yesterday.',
+        'If you\'re not early, you\'re late. Show up prepared.',
+        'Save 10% of every paycheck before you spend anything.',
+        'Listen more than you speak. You learn nothing by talking.',
+        'Your reputation is built over years and destroyed in seconds. Guard it.',
+        'Treat everyone with respect, especially those who can do nothing for you.',
+        'Take care of your body — it\'s the only place you have to live.',
+        'Learn to say no without feeling guilty.',
+        'Invest in experiences, not things. Memories appreciate; possessions depreciate.',
+        'When in doubt, sleep on it. Big decisions rarely need to be made at midnight.',
+        'Read for 30 minutes a day. It compounds over a lifetime.',
+        'Keep your circle small and your mind open.',
+        'Failures are data. Collect it, adjust, and try again.',
+        'Never make a permanent decision based on a temporary emotion.',
+        'Be the person your younger self needed.',
+        'Discipline beats motivation every time. Build habits, not hype.',
+        'Compliment people behind their backs. It says more about you.',
+        'Money is a tool, not a score. Use it to buy time, not status.',
+        'Forgive quickly, but don\'t forget the lesson.',
+        'The best time to start was yesterday. The second best time is now.',
+      ];
+      return sock.sendMessage(ctx.from, { text: `🧭 *Advice*\n\n${pickRandom(advices)}` }, { quoted: msg });
+    },
+  },
+
+  why: {
+    desc: 'Get a random funny "why" question',
+    category: 'fun',
+    run: async (sock, msg, ctx) => {
+      const whys = [
+        'Why do we press the remote harder when the batteries are dying?',
+        'Why is the word "abbreviation" so long?',
+        'Why does lemon juice have artificial flavor but dishwashing liquid has real lemons?',
+        'Why do they call it a building if it\'s already built?',
+        'Why is the man who invests all your money called a "broker"?',
+        'Why do they sterilize needles for lethal injections?',
+        'Why don\'t sheep shrink when it rains?',
+        'Why do we park in driveways and drive on parkways?',
+        'Why is "phonics" not spelled the way it sounds?',
+        'Why do they put Braille dots on the keypad of drive-up ATMs?',
+        'Why do you need a driver\'s license to buy liquor when you can\'t drink and drive?',
+        'Why are they called "apartments" when they\'re stuck together?',
+        'Why do we call it a "hot water heater"? If the water is already hot, why heat it?',
+        'Why do noses run and feet smell?',
+        'Why do you need an appointment to see a therapist? Aren\'t we all walk-ins?',
+      ];
+      return sock.sendMessage(ctx.from, { text: `🤔 *Why?*\n\n${pickRandom(whys)}` }, { quoted: msg });
+    },
+  },
+
+  hack: {
+    desc: 'Fake hacking animation (just for fun)',
+    category: 'fun',
+    run: async (sock, msg, ctx) => {
+      const target = ctx.args.join(' ') || 'the target';
+      const lines = [
+        '🔑 Initializing hack protocol...',
+        '📡 Connecting to mainframe...',
+        '💻 Bypassing firewall layer 1...',
+        '🛡️ Bypassing firewall layer 2...',
+        '🔓 Decrypting password hash...',
+        '📥 Downloading data packets...',
+        '⚠️ Injecting trojan payload...',
+        '✅ Access granted!',
+        '💀 Hacking complete.',
+        `\n*Successfully hacked ${target}!* (totally real 😏)`,
+      ];
+      let sent = await sock.sendMessage(ctx.from, { text: '🟢 *HACK INITIATED*\n' + lines[0] }, { quoted: msg });
+      for (let i = 1; i < lines.length; i++) {
+        await new Promise(r => setTimeout(r, 800));
+        try { await sock.sendMessage(ctx.from, { text: lines[i], edit: sent.key }); } catch (_) {}
+      }
+    },
+  },
+
+  rate: {
+    desc: 'Rate something out of 100',
+    category: 'fun',
+    run: async (sock, msg, ctx) => {
+      const subject = ctx.args.join(' ');
+      if (!subject) return sock.sendMessage(ctx.from, { text: `❌ Usage: ${ctx.cfg.prefix}rate <thing or @user>` }, { quoted: msg });
+      // Deterministic-ish rating based on text hash so the same input gives same result
+      let hash = 0;
+      for (let i = 0; i < subject.length; i++) hash = ((hash << 5) - hash + subject.charCodeAt(i)) | 0;
+      const rating = Math.abs(hash) % 101;
+      const stars = '⭐'.repeat(Math.ceil(rating / 20));
+      const comments = rating >= 90 ? 'Absolutely elite!' : rating >= 75 ? 'Pretty great!' : rating >= 50 ? 'Not bad at all.' : rating >= 25 ? 'Could be better...' : 'Yikes 😬';
+      return sock.sendMessage(ctx.from, { text: `📊 *Rating*\n\n*${subject}* gets: *${rating}/100*\n${stars}\n\n_${comments}_` }, { quoted: msg });
+    },
+  },
+
+  couple: {
+    desc: 'Check couple compatibility between two mentioned users',
+    category: 'fun',
+    groupOnly: true,
+    run: async (sock, msg, ctx) => {
+      const mentions = getMentions(msg);
+      if (mentions.length < 2) return sock.sendMessage(ctx.from, { text: `❌ Tag two people!\nUsage: ${ctx.cfg.prefix}couple @user1 @user2` }, { quoted: msg });
+      const a = getNumber(mentions[0]);
+      const b = getNumber(mentions[1]);
+      // Deterministic compatibility from the two numbers
+      let hash = 0;
+      const seed = a + b;
+      for (let i = 0; i < seed.length; i++) hash = ((hash << 5) - hash + seed.charCodeAt(i)) | 0;
+      const pct = Math.abs(hash) % 101;
+      const heart = '❤️'.repeat(Math.ceil(pct / 20));
+      const verdict = pct >= 90 ? 'Soulmates! 💍' : pct >= 70 ? 'A great match! 💕' : pct >= 50 ? 'Could work out 😊' : pct >= 30 ? 'It\'s complicated... 🤔' : 'Maybe just stay friends 😅';
+      return sock.sendMessage(ctx.from, {
+        text: `💘 *Couple Compatibility*\n\n@${a} ❤️ @${b}\n\nLove Score: *${pct}%*\n${heart}\n\n_${verdict}_`,
+        mentions: [mentions[0], mentions[1]],
+      }, { quoted: msg });
+    },
+  },
+
+  character: {
+    desc: 'Get a random character description for a user',
+    category: 'fun',
+    run: async (sock, msg, ctx) => {
+      const mentions = getMentions(msg);
+      const target = mentions.length ? `@${getNumber(mentions[0])}` : 'You';
+      const traits = ['loyal', 'brave', 'mysterious', 'chaotic', 'kind-hearted', 'stubborn', 'ambitious', 'clever', 'dramatic', 'chill', 'competitive', 'sweet', 'rebellious', 'wise', 'funny', 'quiet', 'bold', 'gentle', 'sneaky', 'passionate'];
+      const zodiacs = ['Aries 🔥', 'Taurus 🐂', 'Gemini ♊', 'Cancer 🦀', 'Leo 🦁', 'Virgo ♍', 'Libra ⚖️', 'Scorpio 🦂', 'Sagittarius 🏹', 'Capricorn 🐐', 'Aquarius 🌊', 'Pisces 🐟'];
+      const vibes = ['main character energy', 'secret villain energy', 'comic relief energy', 'silent protector energy', 'chaotic neutral energy', 'mentor energy', 'ride-or-die energy', 'plot twist energy'];
+      const t1 = pickRandom(traits), t2 = pickRandom(traits.filter(t => t !== t1));
+      return sock.sendMessage(ctx.from, {
+        text: `🎭 *Character Profile*\n\n${target} is *${t1}* and *${t2}*.\nZodiac: ${pickRandom(zodiacs)}\nVibe: ${pickRandom(vibes)}\n\n_Rating: ${Math.floor(Math.random() * 40) + 60}/100_`,
+        mentions: mentions.length ? [mentions[0]] : [],
+      }, { quoted: msg });
+    },
+  },
+
+  hug: {
+    desc: 'Send a virtual hug to a mentioned user',
+    category: 'fun',
+    run: async (sock, msg, ctx) => {
+      const mentions = getMentions(msg);
+      if (!mentions.length) return sock.sendMessage(ctx.from, { text: `❌ Tag someone to hug!\nUsage: ${ctx.cfg.prefix}hug @user` }, { quoted: msg });
+      const sender = getNumber(ctx.sender);
+      const hugs = ['🤗', '🫂', '💞🤗', '温暖的拥抱~ 🤗', 'big squishy hug 🤗💕'];
+      return sock.sendMessage(ctx.from, {
+        text: `*${sender}* sent a ${pickRandom(hugs)} to *@${getNumber(mentions[0])}*\n\n"A hug is a handshake from the heart." 💚`,
+        mentions: [mentions[0]],
+      }, { quoted: msg });
+    },
+  },
+
+  slap: {
+    desc: 'Slap a mentioned user (fun)',
+    category: 'fun',
+    run: async (sock, msg, ctx) => {
+      const mentions = getMentions(msg);
+      if (!mentions.length) return sock.sendMessage(ctx.from, { text: `❌ Tag someone to slap!\nUsage: ${ctx.cfg.prefix}slap @user` }, { quoted: msg });
+      const sender = getNumber(ctx.sender);
+      const slaps = ['a mighty slap 👋💥', 'a wet fish slap 🐟💥', 'a pillow slap 🛏️💥', 'a flying noodle slap 🍜💥', 'a dramatic slap 👋🔥'];
+      return sock.sendMessage(ctx.from, {
+        text: `*${sender}* gave *@${getNumber(mentions[0])}* ${pickRandom(slaps)}`,
+        mentions: [mentions[0]],
+      }, { quoted: msg });
+    },
+  },
+
+  styletext: {
+    desc: 'Convert text into fancy unicode styles',
+    category: 'utility',
+    run: async (sock, msg, ctx) => {
+      const text = ctx.args.join(' ');
+      if (!text) return sock.sendMessage(ctx.from, { text: `❌ Usage: ${ctx.cfg.prefix}styletext <text>` }, { quoted: msg });
+      const map = {
+        bold: c => c.split('').map(ch => String.fromCharCode(ch.charCodeAt(0) + 0x1D400 - 65)).join(''),
+        italic: c => c.split('').map(ch => String.fromCharCode(ch.charCodeAt(0) + 0x1D434 - 65)).join(''),
+        monospace: c => c.split('').map(ch => String.fromCharCode(ch.charCodeAt(0) + 0x1D670 - 65)).join(''),
+        strikethrough: c => c.split('').map(ch => ch + '\u0336').join(''),
+        underline: c => c.split('').map(ch => ch + '\u0332').join(''),
+      };
+      // Simple fancy maps using unicode offsets for A-Z / a-z
+      const fancy = (c, off) => c.split('').map(ch => {
+        const code = ch.charCodeAt(0);
+        if (code >= 65 && code <= 90) return String.fromCharCode(0x1D400 + off + (code - 65));
+        if (code >= 97 && code <= 122) return String.fromCharCode(0x1D400 + off + 26 + (code - 97));
+        return ch;
+      }).join('');
+      const out = [
+        `𝐁𝐨𝐥𝐝: ${fancy(text, 0)}`,
+        `𝐼𝑡𝑎𝑙𝑖𝑐: ${fancy(text, 4)}`,
+        `𝙗𝙤𝙡𝙙 𝙞𝙩𝙖𝙡𝙞𝙘: ${fancy(text, 6)}`,
+        `𝔅𝔬𝔩𝔡 𝔉𝔯𝔞𝔨𝔱𝔲𝔯: ${fancy(text, 8)}`,
+        `𝕄𝕠𝕟𝕠𝕤𝕡𝕒𝕔𝕖: ${fancy(text, 12)}`,
+        `𝖲𝖺𝗇𝗌 𝖡𝗈𝗅𝖽: ${fancy(text, 14)}`,
+        `S̶t̶r̶i̶k̶e̶: ${text.split('').map(ch => ch + '\u0336').join('')}`,
+        `U̲n̲d̲e̲r̲l̲i̲n̲e̲: ${text.split('').map(ch => ch + '\u0332').join('')}`,
+      ];
+      return sock.sendMessage(ctx.from, { text: `✨ *Fancy Text Styles*\n\n${out.join('\n\n')}` }, { quoted: msg });
+    },
+  },
+
+  fancy: {
+    desc: 'Generate fancy text in multiple decorative styles',
+    category: 'utility',
+    run: async (sock, msg, ctx) => {
+      const text = ctx.args.join(' ');
+      if (!text) return sock.sendMessage(ctx.from, { text: `❌ Usage: ${ctx.cfg.prefix}fancy <text>` }, { quoted: msg });
+      const convert = (c, start) => c.split('').map(ch => {
+        const code = ch.charCodeAt(0);
+        if (code >= 65 && code <= 90) return String.fromCharCode(start + (code - 65));
+        if (code >= 97 && code <= 122) return String.fromCharCode(start + 26 + (code - 97));
+        return ch;
+      }).join('');
+      const circled = (c) => c.split('').map(ch => {
+        const code = ch.charCodeAt(0);
+        if (code >= 65 && code <= 90) return String.fromCharCode(0x24B6 + (code - 65));
+        if (code >= 97 && code <= 122) return String.fromCharCode(0x24D0 + (code - 97));
+        return ch;
+      }).join('');
+      const fullwidth = (c) => c.split('').map(ch => {
+        const code = ch.charCodeAt(0);
+        if (code >= 33 && code <= 126) return String.fromCharCode(code + 0xFEE0);
+        return ch;
+      }).join('');
+      const styles = [
+        `𝓢𝓬𝓻𝓲𝓹𝓽: ${convert(text, 0x1D4D0)}`,
+        `𝔉𝔯𝔞𝔨𝔱𝔲𝔯: ${convert(text, 0x1D504)}`,
+        `𝕆𝕝𝕪𝕞𝕡𝕚𝕒: ${convert(text, 0x1D538)}`,
+        `Ⓒⓘⓡⓒⓛⓔⓓ: ${circled(text)}`,
+        `Ｆｕｌｌｗｉｄｔｈ: ${fullwidth(text)}`,
+        `𝗦𝗮𝗻𝘀: ${convert(text, 0x1D5D4)}`,
+        `𝘉𝘰𝘭𝘥 𝘐𝘵𝘢𝘭𝘪𝘤: ${convert(text, 0x1D608)}`,
+        `𝒮𝒸𝓇𝒾𝓅𝓉: ${convert(text, 0x1D4B6)}`,
+      ];
+      return sock.sendMessage(ctx.from, { text: `🎭 *Fancy Text*\n\n${styles.join('\n\n')}` }, { quoted: msg });
+    },
+  },
+
+  tinyurl: {
+    desc: 'Shorten a URL using TinyURL',
+    category: 'utility',
+    run: async (sock, msg, ctx) => {
+      const url = ctx.args[0];
+      if (!url || !/^https?:\/\//i.test(url)) return sock.sendMessage(ctx.from, { text: `❌ Usage: ${ctx.cfg.prefix}tinyurl <url>\nExample: ${ctx.cfg.prefix}tinyurl https://example.com` }, { quoted: msg });
+      try {
+        const data = await fetchJSON(`https://tinyurl.com/api-create.php?url=${encodeURIComponent(url)}`, { text: true });
+        return sock.sendMessage(ctx.from, { text: `🔗 *Shortened URL*\n\n${data}` }, { quoted: msg });
+      } catch (e) {
+        return sock.sendMessage(ctx.from, { text: `❌ Failed to shorten URL: ${e.message}` }, { quoted: msg });
+      }
+    },
+  },
+
+  google: {
+    desc: 'Generate a Google search link',
+    category: 'utility',
+    run: async (sock, msg, ctx) => {
+      const query = ctx.args.join(' ');
+      if (!query) return sock.sendMessage(ctx.from, { text: `❌ Usage: ${ctx.cfg.prefix}google <search query>` }, { quoted: msg });
+      const link = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+      return sock.sendMessage(ctx.from, { text: `🔍 *Google Search*\n\nQuery: ${query}\nLink: ${link}` }, { quoted: msg });
+    },
+  },
+
+  wikipedia: {
+    desc: 'Search Wikipedia for a summary',
+    category: 'utility',
+    run: async (sock, msg, ctx) => {
+      const query = ctx.args.join(' ');
+      if (!query) return sock.sendMessage(ctx.from, { text: `❌ Usage: ${ctx.cfg.prefix}wikipedia <topic>` }, { quoted: msg });
+      try {
+        const data = await fetchJSON(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(query.replace(/ /g, '_'))}`);
+        if (data.type === 'disambiguation' || !data.extract) {
+          return sock.sendMessage(ctx.from, { text: `❌ No direct article found for "${query}". Try a more specific term.` }, { quoted: msg });
+        }
+        const text = `📚 *Wikipedia: ${data.title}*\n\n${data.extract}${data.thumbnail?.source ? '' : ''}\n\n🔗 ${data.content_urls?.desktop?.page || ''}`;
+        return sock.sendMessage(ctx.from, { text }, { quoted: msg });
+      } catch (e) {
+        return sock.sendMessage(ctx.from, { text: `❌ Wikipedia lookup failed: ${e.message}` }, { quoted: msg });
+      }
+    },
+  },
+
+  repo: {
+    desc: 'Get GitHub repository info by name (owner/repo)',
+    category: 'utility',
+    run: async (sock, msg, ctx) => {
+      const repo = ctx.args.join(' ').trim();
+      if (!repo || !repo.includes('/')) return sock.sendMessage(ctx.from, { text: `❌ Usage: ${ctx.cfg.prefix}repo <owner/repo>\nExample: ${ctx.cfg.prefix}repo ntandoofcchisaya/NtandoMods` }, { quoted: msg });
+      try {
+        const data = await fetchJSON(`https://api.github.com/repos/${repo}`);
+        const text = `📦 *GitHub Repo*\n\n*${data.full_name}*\n${data.description || '_No description_'}\n\n⭐ Stars: ${data.stargazers_count}\n🍴 Forks: ${data.forks_count}\n👁️ Watchers: ${data.watchers_count}\n📝 Language: ${data.language || 'N/A'}\n📅 Created: ${data.created_at?.slice(0, 10)}\n🔄 Updated: ${data.updated_at?.slice(0, 10)}\n\n🔗 ${data.html_url}`;
+        return sock.sendMessage(ctx.from, { text }, { quoted: msg });
+      } catch (e) {
+        return sock.sendMessage(ctx.from, { text: `❌ Repo not found or error: ${e.message}` }, { quoted: msg });
+      }
+    },
+  },
+
+  tagme: {
+    desc: 'Tag yourself (mention your own number)',
+    category: 'fun',
+    run: async (sock, msg, ctx) => {
+      const num = getNumber(ctx.sender);
+      return sock.sendMessage(ctx.from, { text: `👋 Here you go: @${num}`, mentions: [ctx.sender] }, { quoted: msg });
+    },
+  },
+
+  poll: {
+    desc: 'Create a simple poll',
+    category: 'group',
+    groupOnly: true,
+    run: async (sock, msg, ctx) => {
+      const text = ctx.args.join(' ');
+      if (!text || !text.includes('|')) return sock.sendMessage(ctx.from, { text: `❌ Usage: ${ctx.cfg.prefix}poll Question | Option1 | Option2 | ...\nExample: ${ctx.cfg.prefix}poll Best food? | Pizza | Burger | Sushi` }, { quoted: msg });
+      const parts = text.split('|').map(s => s.trim());
+      const question = parts.shift();
+      if (parts.length < 2) return sock.sendMessage(ctx.from, { text: `❌ Provide at least 2 options separated by |` }, { quoted: msg });
+      let body = `📊 *Poll*\n\n*${question}*\n\n`;
+      parts.forEach((opt, i) => { body += `${i + 1}️⃣ ${opt}\n`; });
+      body += `\n_React with the number to vote!_`;
+      return sock.sendMessage(ctx.from, { text: body }, { quoted: msg });
+    },
+  },
+
+  randompw: {
+    desc: 'Generate a random secure password',
+    category: 'utility',
+    run: async (sock, msg, ctx) => {
+      const len = Math.min(Math.max(parseInt(ctx.args[0]) || 12, 6), 64);
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;:,.<>?';
+      let pw = '';
+      for (let i = 0; i < len; i++) pw += chars[Math.floor(Math.random() * chars.length)];
+      return sock.sendMessage(ctx.from, { text: `🔐 *Generated Password* (${len} chars)\n\n\`${pw}\`\n\n_Keep it safe and don't share it!_` }, { quoted: msg });
+    },
+  },
+
+  hash: {
+    desc: 'Hash text using MD5 or SHA256',
+    category: 'utility',
+    run: async (sock, msg, ctx) => {
+      const algo = (ctx.args[0] || '').toLowerCase();
+      const text = ctx.args.slice(1).join(' ');
+      if (!algo || !text || !['md5', 'sha256'].includes(algo)) {
+        return sock.sendMessage(ctx.from, { text: `❌ Usage: ${ctx.cfg.prefix}hash <md5|sha256> <text>\nExample: ${ctx.cfg.prefix}hash sha256 hello` }, { quoted: msg });
+      }
+      const crypto = require('crypto');
+      const hash = crypto.createHash(algo).update(text).digest('hex');
+      return sock.sendMessage(ctx.from, { text: `🔐 *${algo.toUpperCase()} Hash*\n\nInput: ${text}\nHash: \`${hash}\`` }, { quoted: msg });
+    },
+  },
+
+  reverse: {
+    desc: 'Reverse the given text',
+    category: 'utility',
+    run: async (sock, msg, ctx) => {
+      const text = ctx.args.join(' ');
+      if (!text) return sock.sendMessage(ctx.from, { text: `❌ Usage: ${ctx.cfg.prefix}reverse <text>` }, { quoted: msg });
+      const reversed = text.split('').reverse().join('');
+      return sock.sendMessage(ctx.from, { text: `🔁 *Reversed Text*\n\n${reversed}` }, { quoted: msg });
+    },
+  },
+
   help: {
     desc: 'Alias for menu',
     category: 'core',
