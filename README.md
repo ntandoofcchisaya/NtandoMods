@@ -108,7 +108,36 @@ View-once media commands let you reveal, convert, edit, and send view-once messa
    node index.js
    ```
 
-4. Scan the QR code with WhatsApp to connect.
+4. Scan the QR code with WhatsApp to connect — **or** use the **Pair Site** to get a Session ID and skip the QR (see below).
+
+## 🔗 Pair Site & Session ID (No QR Needed)
+
+The repo includes a standalone **Pair Code Generator** in the `pair-site/` folder. Deploy it on Render, enter your phone number, get a pairing code, link WhatsApp, and receive a **Session ID string**. Set that string as the `SESSION_ID` env var on your bot deployment and it auto-connects — no QR scan required.
+
+### Deploy the pair site on Render
+
+1. On [render.com](https://render.com) → **New → Web Service**.
+2. Connect this repo. Set **Root Directory** to `pair-site`.
+3. Render auto-detects `pair-site/render.yaml`:
+   - **Build:** `npm install`
+   - **Start:** `node server.js`
+4. Deploy → you'll get a URL like `https://ntandomods-pair.onrender.com`.
+
+### Get your Session ID
+
+1. Open the pair site URL.
+2. Enter your WhatsApp number **with country code** (e.g. `27123456789`).
+3. An 8-digit code appears — open WhatsApp → **Settings → Linked Devices → Link a Device → Link with phone number instead** → type the code.
+4. Once linked, the site shows your **Session ID** (`KnightBot!<base64>...`). Copy it.
+
+### Deploy the bot with the Session ID
+
+1. On Render, create another Web Service from the same repo (root = repo root, **not** `pair-site`).
+2. **Build:** `npm install` · **Start:** `node index.js`.
+3. Add env var **`SESSION_ID`** = your copied session string.
+4. Deploy — the bot decodes the session string into `creds.json` and boots up already linked.
+
+> See [`pair-site/README.md`](pair-site/README.md) for the full API reference and local dev instructions.
 
 ## ⚙️ Configuration
 
