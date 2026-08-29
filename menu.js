@@ -2636,6 +2636,237 @@ const commands = {
     },
   },
 
+  // ────────────────────────────────────────────────────────────
+  //  10 VIEW-ONCE (VV) COMMANDS
+  // ────────────────────────────────────────────────────────────
+
+  vvimg: {
+    desc: 'Reveal & download a view-once image (reply)',
+    category: 'media',
+    run: async (sock, msg, ctx) => {
+      try {
+        const { downloadContentFromMessage } = require('@whiskeysockets/baileys');
+        const q = msg.message?.extendedTextMessage?.contextInfo?.quotedMessage;
+        if (!q) return sock.sendMessage(ctx.from, { text: '🗑️ Reply to a view-once image.' }, { quoted: msg });
+        const vo = q.viewOnceMessageV2?.message || q.viewOnceMessage?.message || q;
+        const mtype = Object.keys(vo)[0];
+        if (mtype !== 'imageMessage') return sock.sendMessage(ctx.from, { text: '❌ That is not a view-once image!' }, { quoted: msg });
+        const stream = await downloadContentFromMessage(vo[mtype], 'image');
+        const chunks = [];
+        for await (const chunk of stream) chunks.push(chunk);
+        const buffer = Buffer.concat(chunks);
+        return sock.sendMessage(ctx.from, { image: buffer, caption: '🖼️ View-once image revealed & downloaded!' }, { quoted: msg });
+      } catch (e) {
+        return sock.sendMessage(ctx.from, { text: `❌ Error: ${e.message}` }, { quoted: msg });
+      }
+    },
+  },
+
+  vvvid: {
+    desc: 'Reveal & download a view-once video (reply)',
+    category: 'media',
+    run: async (sock, msg, ctx) => {
+      try {
+        const { downloadContentFromMessage } = require('@whiskeysockets/baileys');
+        const q = msg.message?.extendedTextMessage?.contextInfo?.quotedMessage;
+        if (!q) return sock.sendMessage(ctx.from, { text: '🗑️ Reply to a view-once video.' }, { quoted: msg });
+        const vo = q.viewOnceMessageV2?.message || q.viewOnceMessage?.message || q;
+        const mtype = Object.keys(vo)[0];
+        if (mtype !== 'videoMessage') return sock.sendMessage(ctx.from, { text: '❌ That is not a view-once video!' }, { quoted: msg });
+        const stream = await downloadContentFromMessage(vo[mtype], 'video');
+        const chunks = [];
+        for await (const chunk of stream) chunks.push(chunk);
+        const buffer = Buffer.concat(chunks);
+        return sock.sendMessage(ctx.from, { video: buffer, caption: '🎬 View-once video revealed & downloaded!' }, { quoted: msg });
+      } catch (e) {
+        return sock.sendMessage(ctx.from, { text: `❌ Error: ${e.message}` }, { quoted: msg });
+      }
+    },
+  },
+
+  vvaudio: {
+    desc: 'Reveal & download a view-once audio (reply)',
+    category: 'media',
+    run: async (sock, msg, ctx) => {
+      try {
+        const { downloadContentFromMessage } = require('@whiskeysockets/baileys');
+        const q = msg.message?.extendedTextMessage?.contextInfo?.quotedMessage;
+        if (!q) return sock.sendMessage(ctx.from, { text: '🗑️ Reply to a view-once audio.' }, { quoted: msg });
+        const vo = q.viewOnceMessageV2?.message || q.viewOnceMessage?.message || q;
+        const mtype = Object.keys(vo)[0];
+        if (mtype !== 'audioMessage') return sock.sendMessage(ctx.from, { text: '❌ That is not a view-once audio!' }, { quoted: msg });
+        const stream = await downloadContentFromMessage(vo[mtype], 'audio');
+        const chunks = [];
+        for await (const chunk of stream) chunks.push(chunk);
+        const buffer = Buffer.concat(chunks);
+        return sock.sendMessage(ctx.from, { audio: buffer, mimetype: 'audio/mpeg' }, { quoted: msg });
+      } catch (e) {
+        return sock.sendMessage(ctx.from, { text: `❌ Error: ${e.message}` }, { quoted: msg });
+      }
+    },
+  },
+
+  vvsticker: {
+    desc: 'Convert a view-once image to sticker (reply)',
+    category: 'media',
+    run: async (sock, msg, ctx) => {
+      try {
+        const { downloadContentFromMessage } = require('@whiskeysockets/baileys');
+        const q = msg.message?.extendedTextMessage?.contextInfo?.quotedMessage;
+        if (!q) return sock.sendMessage(ctx.from, { text: '🗑️ Reply to a view-once image to convert to sticker.' }, { quoted: msg });
+        const vo = q.viewOnceMessageV2?.message || q.viewOnceMessage?.message || q;
+        const mtype = Object.keys(vo)[0];
+        if (mtype !== 'imageMessage') return sock.sendMessage(ctx.from, { text: '❌ Only view-once images can be converted to stickers!' }, { quoted: msg });
+        const stream = await downloadContentFromMessage(vo[mtype], 'image');
+        const chunks = [];
+        for await (const chunk of stream) chunks.push(chunk);
+        const buffer = Buffer.concat(chunks);
+        return sock.sendMessage(ctx.from, { sticker: buffer }, { quoted: msg });
+      } catch (e) {
+        return sock.sendMessage(ctx.from, { text: `❌ Error: ${e.message}` }, { quoted: msg });
+      }
+    },
+  },
+
+  vvtoimg: {
+    desc: 'Convert a view-once sticker to image (reply)',
+    category: 'media',
+    run: async (sock, msg, ctx) => {
+      try {
+        const { downloadContentFromMessage } = require('@whiskeysockets/baileys');
+        const q = msg.message?.extendedTextMessage?.contextInfo?.quotedMessage;
+        if (!q) return sock.sendMessage(ctx.from, { text: '🗑️ Reply to a view-once sticker.' }, { quoted: msg });
+        const vo = q.viewOnceMessageV2?.message || q.viewOnceMessage?.message || q;
+        const mtype = Object.keys(vo)[0];
+        if (mtype !== 'stickerMessage') return sock.sendMessage(ctx.from, { text: '❌ That is not a view-once sticker!' }, { quoted: msg });
+        const stream = await downloadContentFromMessage(vo[mtype], 'sticker');
+        const chunks = [];
+        for await (const chunk of stream) chunks.push(chunk);
+        const buffer = Buffer.concat(chunks);
+        const Jimp = require('jimp');
+        const image = await Jimp.read(buffer);
+        const out = await image.getBufferAsync(Jimp.MIME_PNG);
+        return sock.sendMessage(ctx.from, { image: out, caption: '🖼️ View-once sticker converted to image!' }, { quoted: msg });
+      } catch (e) {
+        return sock.sendMessage(ctx.from, { text: `❌ Error: ${e.message}` }, { quoted: msg });
+      }
+    },
+  },
+
+  vvblur: {
+    desc: 'Reveal a view-once image & apply blur (reply)',
+    category: 'media',
+    run: async (sock, msg, ctx) => {
+      try {
+        const { downloadContentFromMessage } = require('@whiskeysockets/baileys');
+        const q = msg.message?.extendedTextMessage?.contextInfo?.quotedMessage;
+        if (!q) return sock.sendMessage(ctx.from, { text: '🗑️ Reply to a view-once image.' }, { quoted: msg });
+        const vo = q.viewOnceMessageV2?.message || q.viewOnceMessage?.message || q;
+        const mtype = Object.keys(vo)[0];
+        if (mtype !== 'imageMessage') return sock.sendMessage(ctx.from, { text: '❌ Only view-once images supported!' }, { quoted: msg });
+        const stream = await downloadContentFromMessage(vo[mtype], 'image');
+        const chunks = [];
+        for await (const chunk of stream) chunks.push(chunk);
+        const buffer = Buffer.concat(chunks);
+        const Jimp = require('jimp');
+        const image = await Jimp.read(buffer);
+        image.blur(10);
+        const out = await image.getBufferAsync(Jimp.MIME_PNG);
+        return sock.sendMessage(ctx.from, { image: out, caption: '🌫️ View-once revealed + blurred!' }, { quoted: msg });
+      } catch (e) {
+        return sock.sendMessage(ctx.from, { text: `❌ Error: ${e.message}` }, { quoted: msg });
+      }
+    },
+  },
+
+  vvgray: {
+    desc: 'Reveal a view-once image & apply grayscale (reply)',
+    category: 'media',
+    run: async (sock, msg, ctx) => {
+      try {
+        const { downloadContentFromMessage } = require('@whiskeysockets/baileys');
+        const q = msg.message?.extendedTextMessage?.contextInfo?.quotedMessage;
+        if (!q) return sock.sendMessage(ctx.from, { text: '🗑️ Reply to a view-once image.' }, { quoted: msg });
+        const vo = q.viewOnceMessageV2?.message || q.viewOnceMessage?.message || q;
+        const mtype = Object.keys(vo)[0];
+        if (mtype !== 'imageMessage') return sock.sendMessage(ctx.from, { text: '❌ Only view-once images supported!' }, { quoted: msg });
+        const stream = await downloadContentFromMessage(vo[mtype], 'image');
+        const chunks = [];
+        for await (const chunk of stream) chunks.push(chunk);
+        const buffer = Buffer.concat(chunks);
+        const Jimp = require('jimp');
+        const image = await Jimp.read(buffer);
+        image.grayscale();
+        const out = await image.getBufferAsync(Jimp.MIME_PNG);
+        return sock.sendMessage(ctx.from, { image: out, caption: '🖤 View-once revealed + grayscale!' }, { quoted: msg });
+      } catch (e) {
+        return sock.sendMessage(ctx.from, { text: `❌ Error: ${e.message}` }, { quoted: msg });
+      }
+    },
+  },
+
+  vvrotate: {
+    desc: 'Reveal a view-once image & rotate it (reply, usage: .vvrotate <deg>)',
+    category: 'media',
+    run: async (sock, msg, ctx) => {
+      try {
+        const { downloadContentFromMessage } = require('@whiskeysockets/baileys');
+        const q = msg.message?.extendedTextMessage?.contextInfo?.quotedMessage;
+        if (!q) return sock.sendMessage(ctx.from, { text: '🗑️ Reply to a view-once image.' }, { quoted: msg });
+        const vo = q.viewOnceMessageV2?.message || q.viewOnceMessage?.message || q;
+        const mtype = Object.keys(vo)[0];
+        if (mtype !== 'imageMessage') return sock.sendMessage(ctx.from, { text: '❌ Only view-once images supported!' }, { quoted: msg });
+        const deg = parseInt(ctx.args[0]) || 90;
+        const stream = await downloadContentFromMessage(vo[mtype], 'image');
+        const chunks = [];
+        for await (const chunk of stream) chunks.push(chunk);
+        const buffer = Buffer.concat(chunks);
+        const Jimp = require('jimp');
+        const image = await Jimp.read(buffer);
+        image.rotate(deg);
+        const out = await image.getBufferAsync(Jimp.MIME_PNG);
+        return sock.sendMessage(ctx.from, { image: out, caption: `🔄 View-once revealed + rotated ${deg}°!` }, { quoted: msg });
+      } catch (e) {
+        return sock.sendMessage(ctx.from, { text: `❌ Error: ${e.message}` }, { quoted: msg });
+      }
+    },
+  },
+
+  vvsend: {
+    desc: 'Send an image as view-once (reply to image)',
+    category: 'media',
+    run: async (sock, msg, ctx) => {
+      const imgMsg = getQuotedImage(msg);
+      if (!imgMsg) return sock.sendMessage(ctx.from, { text: '❌ Reply to an image to send it as view-once.' }, { quoted: msg });
+      try {
+        const buffer = await sock.downloadMediaMessage?.({ key: msg.key, message: { imageMessage: imgMsg } });
+        if (!buffer) throw new Error('download failed');
+        return sock.sendMessage(ctx.from, { image: buffer, viewOnce: true, caption: '👁️ Sent as view-once!' }, { quoted: msg });
+      } catch (e) {
+        return sock.sendMessage(ctx.from, { text: `❌ Error: ${e.message}` }, { quoted: msg });
+      }
+    },
+  },
+
+  vvinfo: {
+    desc: 'Check if a replied message is view-once',
+    category: 'media',
+    run: async (sock, msg, ctx) => {
+      const q = msg.message?.extendedTextMessage?.contextInfo?.quotedMessage;
+      if (!q) return sock.sendMessage(ctx.from, { text: '🗑️ Reply to a message to check if it is view-once.' }, { quoted: msg });
+      const isV2 = !!q.viewOnceMessageV2;
+      const isV1 = !!q.viewOnceMessage;
+      const isExt = !!q.viewOnceMessageV2Extension;
+      const vo = q.viewOnceMessageV2?.message || q.viewOnceMessage?.message || q.viewOnceMessageV2Extension?.message || q;
+      const mtype = Object.keys(vo)[0];
+      if (isV2 || isV1 || isExt) {
+        const typeMap = { imageMessage: 'Image 🖼️', videoMessage: 'Video 🎬', audioMessage: 'Audio 🎵', stickerMessage: 'Sticker ✨' };
+        return sock.sendMessage(ctx.from, { text: `👁️ *View-Once Message Detected*\n\nType: ${typeMap[mtype] || mtype}\nVersion: ${isV2 ? 'V2' : isV1 ? 'V1' : 'Extension'}\n\nUse .viewonce to reveal it!` }, { quoted: msg });
+      }
+      return sock.sendMessage(ctx.from, { text: '❌ This message is NOT view-once.' }, { quoted: msg });
+    },
+  },
+
   help: {
     desc: 'Alias for menu',
     category: 'core',
