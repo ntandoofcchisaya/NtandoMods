@@ -1,0 +1,22 @@
+{
+  "name": "ntandomods",
+  "version": "1.0.0",
+  "description": "NtandoMods — A lightweight, fast, and feature-rich WhatsApp bot built on Baileys",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [
+    "whatsapp",
+    "bot",
+    "baileys",
+    "ntandomods",
+    "lightweight"
+  ],
+  "author": "NtandoMods",
+  "license": "MIT",
+  "dependencies": {
+    "@whiskeysockets/baileys": "^6.7.18",
+    "pino": "^8.11.0"
+  }
+}
