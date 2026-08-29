@@ -12,6 +12,8 @@ const {
   getSender, getNumber, isOwner, isGroupAdmin, isBotAdmin,
   getBody, getQuotedText, getQuotedImage, fmtUptime, pickRandom,
 } = helpers;
+const lib = require('./lib.js');
+const { isSudo, getGroupSettings } = lib;
 
 
 /* ════════════════════════════════════════════════════════════
@@ -34,8 +36,8 @@ async function handleMessage(sock, msg, config) {
   const cmd = commands[name];
   if (!cmd) return;
 
-  // Self mode: only owner can use commands
-  if (config.selfMode && !isOwner(sender, config)) return;
+  // Self mode: only owner and sudo users can use commands
+  if (config.selfMode && !isOwner(sender, config) && !isSudo(sender)) return;
 
   // Owner-only check
   if (cmd.ownerOnly && !isOwner(sender, config)) {
@@ -100,29 +102,28 @@ async function handleGroupUpdate(sock, update, config) {
     const { id, participants, action } = update;
     if (!participants || participants.length === 0) return;
 
+    const settings = getGroupSettings(id) || {};
+
     for (const participant of participants) {
       const num = getNumber(participant);
       if (action === 'add') {
-        const text =
-          `╭━━━❰ *${config.botName}* ❱━━━╮\n` +
-          `┃ 👋 Welcome @${num}!\n` +
-          `┃ 🎉 You joined the group.\n` +
-          `┃ Type ${config.prefix}menu for commands.\n` +
-          `╰━━━━━━━━━━━━━━━━━╯\n` +
-          `> Powered by NtandoMods ⚡`;
+        if (settings.welcome === false) continue;
+        const custom = settings.welcomeMessage && settings.welcomeMessage.trim();
+        const text = custom
+          ? custom.replace(/@user/gi, '@' + num)
+          : '\u256d\u2501\u2501\u2501\u2770 *' + config.botName + '* \u2771\u2501\u2501\u2501\u256e\n\u2503 \ud83d\udc4b Welcome @' + num + '!\n\u2503 \ud83c\udf89 You joined the group.\n\u2503 Type ' + config.prefix + 'menu for commands.\n\u2570\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u256f\n> Powered by NtandoMods \u26a1';
         await sock.sendMessage(id, { text, mentions: [participant] });
       } else if (action === 'remove') {
-        const text =
-          `╭━━━━━━━━━━━━━━━━━╮\n` +
-          `┃ 👋 Goodbye @${num}!\n` +
-          `┃ We'll miss you. 🥺\n` +
-          `╰━━━━━━━━━━━━━━━━━╯\n` +
-          `> ${config.botName}`;
+        if (settings.goodbye === false) continue;
+        const custom = settings.goodbyeMessage && settings.goodbyeMessage.trim();
+        const text = custom
+          ? custom.replace(/@user/gi, '@' + num)
+          : '\u256d\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u256e\n\u2503 \ud83d\udc4b Goodbye @' + num + '!\n\u2503 We will miss you. \ud83e\udd7a\n\u2570\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u256f\n> ' + config.botName;
         await sock.sendMessage(id, { text, mentions: [participant] });
       } else if (action === 'promote') {
-        await sock.sendMessage(id, { text: `🎉 @${num} is now an admin!`, mentions: [participant] });
+        await sock.sendMessage(id, { text: '\ud83c\udf89 @' + num + ' is now an admin!', mentions: [participant] });
       } else if (action === 'demote') {
-        await sock.sendMessage(id, { text: `📉 @${num} is no longer an admin.`, mentions: [participant] });
+        await sock.sendMessage(id, { text: '\ud83d\udcc9 @' + num + ' is no longer an admin.', mentions: [participant] });
       }
     }
   } catch (e) {

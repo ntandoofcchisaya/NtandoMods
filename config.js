@@ -11,7 +11,8 @@ module.exports = {
 
   // ─── Behavior ───
   prefix: process.env.BOT_PREFIX || '.',
-  selfMode: false,         // true = only owner can use commands
+  selfMode: false,         // true = only owner/sudo can use commands (private mode)
+  antiCall: false,         // true = auto-reject incoming WhatsApp calls
   autoRead: true,          // auto-read incoming messages
   autoTyping: true,        // show "typing..." when processing
   autoReact: true,         // auto-react to commands

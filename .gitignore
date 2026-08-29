@@ -5,3 +5,6 @@ sessions/
 *.log
 npm-debug.log*
 todo.md
+
+# Runtime data files
+data/*.json
